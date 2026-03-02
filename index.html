@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <title>Blackjack</title>
+
+    <!--Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+    <header class="titulo">Raul's Blackjack</header>
+
+    <main>
+        <div class="row pt-2">
+            <div class="col text-center">
+                <button type="button" class="btn btn-primary">Nuevo Juego</button>
+                <button type="button" class="btn btn-success">Pedir Carta</button>
+                <button type="button" class="btn btn-danger">Detener</button>
+            </div>
+        </div>
+        <div class="row container">
+            <div class="col">
+                <h1>Jugador 1 - <small>0</small></h1>
+                <div id="jugador-cartas">
+                    <!--
+                    <img class="carta" src="assets/cartas/10C.png" alt="">
+                    <img class="carta" src="assets/cartas/10C.png" alt="">
+                    <img class="carta" src="assets/cartas/10C.png" alt="">
+                    <img class="carta" src="assets/cartas/10C.png" alt="">
+                    -->
+                </div>
+            </div>
+        </div>
+
+        <div class="row container">
+            <div class="col">
+                <h1>Computadora - <small>0</small></h1>
+                <div id="computadora-cartas">
+                    <!--
+                    <img class="carta" src="assets/cartas/2C.png" alt="">
+                    <img class="carta" src="assets/cartas/2C.png" alt="">
+                    <img class="carta" src="assets/cartas/8C.png" alt="">
+                    <img class="carta" src="assets/cartas/4D.png" alt="">
+                     -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
+    <script src="./assets/js/juego.js"></script>
+
+    <!--Bootstrap-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>
