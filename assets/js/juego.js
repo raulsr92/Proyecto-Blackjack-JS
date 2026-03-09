@@ -66,15 +66,25 @@ const pedirCarta= () =>{
     return cartaTomada
 }
 
+//Esta función me permite saber el valor de la carta tomada
 
-
+const valorCarta = (carta)=>{
+    const valor = carta.slice(0,-1);
+    return !isNaN(valor) ?  parseInt(valor)
+            : (valor==='A') ? 11 
+            : 10
+}
 
 
 /* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Algoritmo ¬¬¬¬¬¬¬¬¬¬¬¬*/
 
+//1° Creo baraja
 let miBaraja =crearDeck()
 
-// deck = []
-pedirCarta()
+//2° LLamo a valorCarta pero esta vez no le paso un valor en duro como argumento, si no que le paso el valor del llamado a pedir carta
 
+let resultado = valorCarta(pedirCarta())
+
+console.log(typeof(resultado))
+console.log(resultado)
 
