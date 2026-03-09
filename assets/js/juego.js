@@ -7,13 +7,16 @@
 
 */
 
-/*Variables, arreglos*/
+/* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Variables, arreglos ¬¬¬¬¬¬¬¬¬¬¬¬*/
 
 let deck = [];
+let cartaTomada;
 const tipos = ['C','D', 'H', 'S']
 const especiales = ['A','J', 'Q', 'K']
 
-/*Funciones*/
+/* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Funciones ¬¬¬¬¬¬¬¬¬¬¬¬*/
+
+//Esta función crea la baraja
 
 const crearDeck = () =>{
 
@@ -39,13 +42,39 @@ const crearDeck = () =>{
         }
         
     }
-    console.log({deck})
+    //console.log({deck})
     deck = _.shuffle(deck)
-    console.log({deck})
+    console.log(deck)
 
     return deck
 }
 
+//Esta función me permite tomar una carta
+
+const pedirCarta= () =>{
+
+    if(deck.length===0){
+
+        throw new Error("No hay cartas en el Deck");
+    }
+
+    cartaTomada = deck.pop() //remueve el último elemento del arreglo
+
+    console.log(`La carta tomada ha sido ${cartaTomada}`)
+    console.log(deck)
+    
+    return cartaTomada
+}
+
+
+
+
+
+/* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Algoritmo ¬¬¬¬¬¬¬¬¬¬¬¬*/
 
 let miBaraja =crearDeck()
-console.log(miBaraja)
+
+// deck = []
+pedirCarta()
+
+
