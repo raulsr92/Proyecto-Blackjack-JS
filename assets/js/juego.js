@@ -11,8 +11,21 @@
 
 let deck = [];
 let cartaTomada;
+
+let puntosJugador = 0;
+let puntosComputadora = 0;
+
 const tipos = ['C','D', 'H', 'S']
 const especiales = ['A','J', 'Q', 'K']
+
+const elementosSmall = document.querySelectorAll("small")
+console.log(elementosSmall)
+
+
+/* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Referencias del HTML ¬¬¬¬¬¬¬¬¬¬¬¬*/
+
+
+const btnPedir = document.getElementById("btnPedir")
 
 /* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Funciones ¬¬¬¬¬¬¬¬¬¬¬¬*/
 
@@ -57,12 +70,9 @@ const pedirCarta= () =>{
 
         throw new Error("No hay cartas en el Deck");
     }
-
     cartaTomada = deck.pop() //remueve el último elemento del arreglo
-
-    console.log(`La carta tomada ha sido ${cartaTomada}`)
-    console.log(deck)
-    
+    //console.log(`La carta tomada ha sido ${cartaTomada}`)
+    //console.log(deck)
     return cartaTomada
 }
 
@@ -86,5 +96,25 @@ let miBaraja =crearDeck()
 let resultado = valorCarta(pedirCarta())
 
 console.log(typeof(resultado))
-console.log(resultado)
+console.log({cartaTomada,resultado})
+
+
+/* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Eventos ¬¬¬¬¬¬¬¬¬¬¬¬*/
+
+
+btnPedir.addEventListener("click", ()=>{
+
+    const carta = pedirCarta()
+
+    puntosJugador = puntosJugador + valorCarta(carta)
+
+    console.log(puntosJugador)
+
+    //Colocar puntos del jugador en el 1er small
+
+    let [primerSmall] = elementosSmall
+
+    primerSmall.innerHTML = puntosJugador
+})
+
 
