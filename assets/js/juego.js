@@ -7,6 +7,7 @@
 
 */
 
+
 /* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Variables, arreglos ¬¬¬¬¬¬¬¬¬¬¬¬*/
 
 let deck = [];
@@ -18,14 +19,19 @@ let puntosComputadora = 0;
 const tipos = ['C','D', 'H', 'S']
 const especiales = ['A','J', 'Q', 'K']
 
-const elementosSmall = document.querySelectorAll("small")
-console.log(elementosSmall)
+
 
 
 /* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Referencias del HTML ¬¬¬¬¬¬¬¬¬¬¬¬*/
 
 
 const btnPedir = document.getElementById("btnPedir")
+
+const elementosSmall = document.querySelectorAll("small")
+console.log(elementosSmall)
+
+const cartasJugadorContainer = document.querySelector("#jugador-cartas")
+console.log(cartasJugadorContainer)
 
 /* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Funciones ¬¬¬¬¬¬¬¬¬¬¬¬*/
 
@@ -105,16 +111,41 @@ console.log({cartaTomada,resultado})
 btnPedir.addEventListener("click", ()=>{
 
     const carta = pedirCarta()
-
     puntosJugador = puntosJugador + valorCarta(carta)
 
-    console.log(puntosJugador)
-
     //Colocar puntos del jugador en el 1er small
-
     let [primerSmall] = elementosSmall
-
     primerSmall.innerHTML = puntosJugador
+
+    //---------------------------Crear carta jugador
+
+    const cartaJugador = document.createElement("img")
+    //Agregar atributo src (CLAVE)
+    cartaJugador.setAttribute("src",`assets/cartas/${carta}.png` )
+
+    //Agregar clase al elemento
+    cartaJugador.classList.add("carta")
+
+    //Insertar carta en el div contenedor
+    cartasJugadorContainer.append(cartaJugador)
+
+    //---------------------------Evaluar puntos del jugador
+
+    if (puntosJugador>21) {
+
+        console.warn("Lo siento mucho, perdiste")
+        btnPedir.setAttribute("disabled", "true")
+        
+    } else if ( puntosJugador==21){
+        console.warn("21, ganaste!")
+        btnPedir.setAttribute("disabled", "true")
+    }
+
+
 })
+
+
+
+
 
 
