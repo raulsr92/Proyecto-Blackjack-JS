@@ -96,6 +96,38 @@ const valorCarta = (carta)=>{
             : 10
 }
 
+//========== Esta función permite evaluar el resultado y lanzar las alertas de finalización del juego
+
+const evaluarResultado = ()=>{
+
+    console.log({puntosJugador})
+    console.log({puntosComputadora})
+
+    if ( (puntosComputadora > puntosJugador && puntosComputadora<=21) || puntosJugador >21) {
+
+        Swal.fire({
+            title: "Lo siento, perdiste",
+            text: "La computadora gana",
+            icon: "error"
+        });
+        
+    } else if ( (puntosJugador > puntosComputadora && puntosJugador<=21) || puntosComputadora>21 ) {
+
+        Swal.fire({
+            title: "Felicidades, ganaste!",
+            text: "Usted ha ganado la partida",
+            icon: "success"
+        });
+        
+    }  else if (puntosJugador == puntosComputadora){
+        Swal.fire({
+            title: "Es un empate!",
+            text: "Nadie gana",
+            icon: "info"
+        }); 
+    }
+}
+
 
 //========== Esta función realiza el procedimiento de pedir una carta y mostrarla en la pantalla del juego
 
@@ -152,7 +184,7 @@ const turnoPC = (puntoMinimos)=>{
         
     } while (puntosComputadora<puntoMinimos && puntoMinimos<=21 );
 
- 
+    evaluarResultado()
 }
 
 

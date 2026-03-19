@@ -1,8 +1,12 @@
 *{
     margin: 0;
-    background-color: #519A66;
     color: white;
     max-width: 100vw;
+}
+
+body{
+    background-color: #519A66!important;
+
 }
 
 .titulo{
