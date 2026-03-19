@@ -26,6 +26,8 @@ const especiales = ['A','J', 'Q', 'K']
 
 
 const btnPedir = document.getElementById("btnPedir")
+const btnDetener = document.getElementById("btnDetener")
+
 
 const elementosSmall = document.querySelectorAll("small")
 console.log(elementosSmall)
@@ -33,9 +35,12 @@ console.log(elementosSmall)
 const cartasJugadorContainer = document.querySelector("#jugador-cartas")
 console.log(cartasJugadorContainer)
 
+const cartasPCContainer = document.querySelector("#computadora-cartas")
+console.log(cartasPCContainer)
+
 /* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Funciones ¬¬¬¬¬¬¬¬¬¬¬¬*/
 
-//Esta función crea la baraja
+//========== Esta función crea la baraja
 
 const crearDeck = () =>{
 
@@ -68,7 +73,7 @@ const crearDeck = () =>{
     return deck
 }
 
-//Esta función me permite tomar una carta
+//========== Esta función me permite tomar una carta
 
 const pedirCarta= () =>{
 
@@ -82,7 +87,7 @@ const pedirCarta= () =>{
     return cartaTomada
 }
 
-//Esta función me permite saber el valor de la carta tomada
+//========== Esta función me permite saber el valor de la carta tomada
 
 const valorCarta = (carta)=>{
     const valor = carta.slice(0,-1);
@@ -90,6 +95,66 @@ const valorCarta = (carta)=>{
             : (valor==='A') ? 11 
             : 10
 }
+
+
+//========== Esta función realiza el procedimiento de pedir una carta y mostrarla en la pantalla del juego
+
+const jugarTurno = (dueñoTurno)=>{
+
+    // Paso 1°: Pider una carta de la baraja
+        const carta = pedirCarta()
+    // Paso 2°: Obtener los puntos y sumarlos a la cantidad anterior
+        let puntosDelTurno = valorCarta(carta) 
+    // Paso 3°: Generar el elemento HTML de la carta y dejarla lista para mostrar
+        //Crear elemento HTML de la carta
+            const cartaMostrar = document.createElement("img")
+        //Agregar atributo src (CLAVE)
+            cartaMostrar.setAttribute("src",`assets/cartas/${carta}.png` )
+        //Agregar clase al elemento
+            cartaMostrar.classList.add("carta")
+
+    // Paso 4°: Colocar puntos del jugador en el elemento HTML correspondiente y la carta en el contenedor
+        if(dueñoTurno==="pc"){
+            console.log("turno pc")
+
+            puntosComputadora = puntosComputadora +puntosDelTurno
+
+            let [, segundoSmall] = elementosSmall
+            segundoSmall.innerHTML = puntosComputadora
+
+            //Insertar carta en el div contenedor
+            cartasPCContainer.append(cartaMostrar)
+
+        } else if(dueñoTurno==="jugador"){
+
+            console.log("turno jugador")
+            puntosJugador = puntosJugador + puntosDelTurno
+
+            let [primerSmall] = elementosSmall
+            primerSmall.innerHTML = puntosJugador
+
+            //Insertar carta en el div contenedor
+            cartasJugadorContainer.append(cartaMostrar)   
+        }         
+}
+
+//========== Esta función ejecuta el turno de la computadora
+
+const turnoPC = (puntoMinimos)=>{
+    
+    do {
+        jugarTurno("pc")
+
+        if(puntoMinimos>21){
+            break;
+        }
+            
+        
+    } while (puntosComputadora<puntoMinimos && puntoMinimos<=21 );
+
+ 
+}
+
 
 
 /* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Algoritmo ¬¬¬¬¬¬¬¬¬¬¬¬*/
@@ -110,24 +175,7 @@ console.log({cartaTomada,resultado})
 
 btnPedir.addEventListener("click", ()=>{
 
-    const carta = pedirCarta()
-    puntosJugador = puntosJugador + valorCarta(carta)
-
-    //Colocar puntos del jugador en el 1er small
-    let [primerSmall] = elementosSmall
-    primerSmall.innerHTML = puntosJugador
-
-    //---------------------------Crear carta jugador
-
-    const cartaJugador = document.createElement("img")
-    //Agregar atributo src (CLAVE)
-    cartaJugador.setAttribute("src",`assets/cartas/${carta}.png` )
-
-    //Agregar clase al elemento
-    cartaJugador.classList.add("carta")
-
-    //Insertar carta en el div contenedor
-    cartasJugadorContainer.append(cartaJugador)
+    jugarTurno("jugador")
 
     //---------------------------Evaluar puntos del jugador
 
@@ -135,12 +183,15 @@ btnPedir.addEventListener("click", ()=>{
 
         console.warn("Lo siento mucho, perdiste")
         btnPedir.setAttribute("disabled", "true")
+
+        turnoPC(puntosJugador)
         
     } else if ( puntosJugador==21){
         console.warn("21, ganaste!")
         btnPedir.setAttribute("disabled", "true")
-    }
+        turnoPC(puntosJugador)
 
+    }
 
 })
 
