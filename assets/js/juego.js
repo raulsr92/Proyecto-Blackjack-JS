@@ -183,19 +183,31 @@ btnPedir.addEventListener("click", ()=>{
 
         console.warn("Lo siento mucho, perdiste")
         btnPedir.setAttribute("disabled", "true")
-
+        btnDetener.disabled = true
         turnoPC(puntosJugador)
         
     } else if ( puntosJugador==21){
         console.warn("21, ganaste!")
         btnPedir.setAttribute("disabled", "true")
+        btnDetener.disabled = true
         turnoPC(puntosJugador)
 
     }
 
 })
 
+btnDetener.addEventListener("click", ()=>{
 
+    console.log("Click en btn Detener")
+
+    //Bloquear botones PEDIR CARTA y DETENER
+
+    btnPedir.setAttribute("disabled", true )
+    btnDetener.disabled = true
+
+    turnoPC(puntosJugador)
+
+})
 
 
 
