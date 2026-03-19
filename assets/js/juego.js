@@ -6,27 +6,21 @@
  2S = Two of Spades (Espadas)
 
 */
-
-
 /* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Variables, arreglos ¬¬¬¬¬¬¬¬¬¬¬¬*/
 
 let deck = [];
 let cartaTomada;
-
 let puntosJugador = 0;
 let puntosComputadora = 0;
-
 const tipos = ['C','D', 'H', 'S']
 const especiales = ['A','J', 'Q', 'K']
-
-
-
 
 /* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Referencias del HTML ¬¬¬¬¬¬¬¬¬¬¬¬*/
 
 
 const btnPedir = document.getElementById("btnPedir")
 const btnDetener = document.getElementById("btnDetener")
+const btnNuevoJuego = document.getElementById("btnNuevo")
 
 
 const elementosSmall = document.querySelectorAll("small")
@@ -128,7 +122,6 @@ const evaluarResultado = ()=>{
     }
 }
 
-
 //========== Esta función realiza el procedimiento de pedir una carta y mostrarla en la pantalla del juego
 
 const jugarTurno = (dueñoTurno)=>{
@@ -193,20 +186,18 @@ const turnoPC = (puntoMinimos)=>{
 
 }
 
-
-
 /* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Algoritmo ¬¬¬¬¬¬¬¬¬¬¬¬*/
 
 //1° Creo baraja
-let miBaraja =crearDeck()
+
+crearDeck()
 
 //2° LLamo a valorCarta pero esta vez no le paso un valor en duro como argumento, si no que le paso el valor del llamado a pedir carta
 
-let resultado = valorCarta(pedirCarta())
+//let resultado = valorCarta(pedirCarta())
 
-console.log(typeof(resultado))
-console.log({cartaTomada,resultado})
-
+//console.log(typeof(resultado))
+//console.log({cartaTomada,resultado})
 
 /* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Eventos ¬¬¬¬¬¬¬¬¬¬¬¬*/
 
@@ -247,6 +238,30 @@ btnDetener.addEventListener("click", ()=>{
 
 })
 
+btnNuevoJuego.addEventListener("click", () =>{
 
+    // Acción N° 01 - Reiniciar deck de cartas
+        deck = []
+        crearDeck()
 
+    // Acción N° 02 - Borrar cartas de la pantalla
+        cartasJugadorContainer.innerHTML="";
+        cartasPCContainer.replaceChildren()
+
+    // Acción N° 03 - Resetear los puntajes
+
+        //Resetearlos visualmente en el HTML
+        let [primerSmall, segundoSmall] = elementosSmall
+        primerSmall.innerText = 0;
+        segundoSmall.innerText = 0;
+
+        //Resetear las variables globales que almacenan los puntos
+        puntosJugador = 0
+        puntosComputadora = 0
+
+    // Acción N° 04 - Habilitar botones "Pedir carta" y "Detener"
+        btnPedir.disabled = false;
+        btnDetener.disabled = false
+
+})
 
