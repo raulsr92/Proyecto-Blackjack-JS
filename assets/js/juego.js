@@ -184,7 +184,13 @@ const turnoPC = (puntoMinimos)=>{
         
     } while (puntosComputadora<puntoMinimos && puntoMinimos<=21 );
 
-    evaluarResultado()
+    //Evaluación de resultado
+
+    setTimeout(() => {
+        evaluarResultado()
+
+    }, 300);
+
 }
 
 
