@@ -240,6 +240,10 @@ btnDetener.addEventListener("click", ()=>{
 
 btnNuevoJuego.addEventListener("click", () =>{
 
+    //Limpiar la consola
+
+    console.clear()
+
     // Acción N° 01 - Reiniciar deck de cartas
         deck = []
         crearDeck()
