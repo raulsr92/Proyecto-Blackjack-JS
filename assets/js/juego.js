@@ -5,33 +5,52 @@
     'use strict'
     /* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Variables, arreglos ¬¬¬¬¬¬¬¬¬¬¬¬*/
 
-    let deck = [];
-    let cartaTomada;
-    let puntosJugador = 0;
-    let puntosComputadora = 0;
-    
-    const tipos = ['C','D', 'H', 'S']
-    const especiales = ['A','J', 'Q', 'K']
+    let deck = []
+        //puntosJugador = 0,
+        //puntosComputadora = 0;
+
+    const tipos = ['C','D', 'H', 'S'],
+          especiales = ['A','J', 'Q', 'K'];
+
+    let puntosJugadores = []
 
     /* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Referencias del HTML ¬¬¬¬¬¬¬¬¬¬¬¬*/
 
+    const   btnPedir = document.getElementById("btnPedir"),
+            btnDetener = document.getElementById("btnDetener"),
+            btnNuevoJuego = document.getElementById("btnNuevo");
 
-    const btnPedir = document.getElementById("btnPedir")
-    const btnDetener = document.getElementById("btnDetener")
-    const btnNuevoJuego = document.getElementById("btnNuevo")
-
-
-    const elementosSmall = document.querySelectorAll("small")
-
-    const cartasJugadorContainer = document.querySelector("#jugador-cartas")
-
-    const cartasPCContainer = document.querySelector("#computadora-cartas")
+    const   cartasJugadorContainer = document.querySelector("#jugador-cartas"),
+            cartasPCContainer = document.querySelector("#computadora-cartas"),
+            elementosSmall = document.querySelectorAll("small");
 
     /* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Funciones ¬¬¬¬¬¬¬¬¬¬¬¬*/
+
+    //========== Esta función inicializa el juego
+
+    const inicializarJuego = (numeroJugadores = 1)=>{
+
+        deck = crearDeck()
+
+        //Inicializar el array de puntos
+
+        for (let i = 0; i < numeroJugadores+1 ; i++) {
+            
+            puntosJugadores.push(0)
+            
+        }
+
+        console.log({puntosJugadores})
+        console.log(puntosJugadores.length)
+
+    }
 
     //========== Esta función crea la baraja
 
     const crearDeck = () =>{
+
+        //Reiniciar deck de cartas
+            deck = []
 
         //console.warn("Creación de la baraja")
 
@@ -56,8 +75,8 @@
             
         }
         //console.log({deck})
-        deck = _.shuffle(deck)
-        return deck
+        
+        return _.shuffle(deck)
     }
 
     //========== Esta función me permite tomar una carta
@@ -68,10 +87,7 @@
 
             throw new Error("No hay cartas en el Deck");
         }
-        cartaTomada = deck.pop() //remueve el último elemento del arreglo
-        //console.log(`La carta tomada ha sido ${cartaTomada}`)
-        //console.log(deck)
-        return cartaTomada
+        return deck.pop()
     }
 
     //========== Esta función me permite saber el valor de la carta tomada
@@ -179,10 +195,6 @@
 
     }
 
-    /* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Algoritmo ¬¬¬¬¬¬¬¬¬¬¬¬*/
-
-    //1° Creo baraja
-    crearDeck()
 
     /* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Eventos ¬¬¬¬¬¬¬¬¬¬¬¬*/
 
@@ -226,12 +238,11 @@
     btnNuevoJuego.addEventListener("click", () =>{
 
         //Limpiar la consola
-
         console.clear()
 
         // Acción N° 01 - Reiniciar deck de cartas
-            deck = []
-            crearDeck()
+        
+        inicializarJuego()
 
         // Acción N° 02 - Borrar cartas de la pantalla
             cartasJugadorContainer.innerHTML="";
