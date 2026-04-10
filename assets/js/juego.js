@@ -20,10 +20,10 @@
             btnDetener = document.getElementById("btnDetener"),
             btnNuevoJuego = document.getElementById("btnNuevo");
 
-    const   cartasJugadorContainer = document.querySelector("#jugador-cartas"),
-            cartasPCContainer = document.querySelector("#computadora-cartas"),
+    const   contenedoresCartas = document.querySelectorAll(".divCartas"),
             elementosSmall = document.querySelectorAll("small");
 
+    console.log(contenedoresCartas)
     /* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Funciones ¬¬¬¬¬¬¬¬¬¬¬¬*/
 
     //========== Esta función inicializa el juego
@@ -34,15 +34,14 @@
 
         //Inicializar el array de puntos
 
+        puntosJugadores=[]
+
         for (let i = 0; i < numeroJugadores+1 ; i++) {
             
             puntosJugadores.push(0)
             
         }
-
         console.log({puntosJugadores})
-        console.log(puntosJugadores.length)
-
     }
 
     //========== Esta función crea la baraja
@@ -102,27 +101,20 @@
     //========== Esta función permite evaluar el resultado y lanzar las alertas de finalización del juego
 
     const evaluarResultado = ()=>{
-
-        console.log({puntosJugador})
-        console.log({puntosComputadora})
-
-        if ( (puntosComputadora > puntosJugador && puntosComputadora<=21) || puntosJugador >21) {
-
+        if ( (puntosJugadores.length-1 > puntosJugadores[0] && puntosJugadores.length-1<=21) || puntosJugadores[0] >21) {
             Swal.fire({
                 title: "Lo siento, perdiste",
                 text: "La computadora gana",
                 icon: "error"
             });
             
-        } else if ( (puntosJugador > puntosComputadora && puntosJugador<=21) || puntosComputadora>21 ) {
-
+        } else if ( (puntosJugadores[0] > puntosJugadores.length-1 && puntosJugadores[0]<=21) || puntosJugadores.length-1>21 ) {
             Swal.fire({
                 title: "Felicidades, ganaste!",
                 text: "Usted ha ganado la partida",
                 icon: "success"
-            });
-            
-        }  else if (puntosJugador == puntosComputadora){
+            });    
+        }  else if (puntosJugadores[0] == puntosJugadores.length-1){
             Swal.fire({
                 title: "Es un empate!",
                 text: "Nadie gana",
@@ -133,43 +125,29 @@
 
     //========== Esta función realiza el procedimiento de pedir una carta y mostrarla en la pantalla del juego
 
-    const jugarTurno = (dueñoTurno)=>{
+    // turno: 0 = primer jugador y el útlimo será la computadora
 
-        // Paso 1°: Pider una carta de la baraja
-            const carta = pedirCarta()
-        // Paso 2°: Obtener los puntos y sumarlos a la cantidad anterior
-            let puntosDelTurno = valorCarta(carta) 
-        // Paso 3°: Generar el elemento HTML de la carta y dejarla lista para mostrar
-            //Crear elemento HTML de la carta
-                const cartaMostrar = document.createElement("img")
-            //Agregar atributo src (CLAVE)
-                cartaMostrar.setAttribute("src",`assets/cartas/${carta}.png` )
-            //Agregar clase al elemento
-                cartaMostrar.classList.add("carta")
+    const acumularPuntos = (carta,turno)=>{
 
-        // Paso 4°: Colocar puntos del jugador en el elemento HTML correspondiente y la carta en el contenedor
-            if(dueñoTurno==="pc"){
-                console.log("turno pc")
+        puntosJugadores[turno] = puntosJugadores[turno] + valorCarta(carta) 
 
-                puntosComputadora = puntosComputadora +puntosDelTurno
+        elementosSmall[turno].innerHTML = puntosJugadores[turno]
+        console.log({puntosJugadores})
 
-                let [, segundoSmall] = elementosSmall
-                segundoSmall.innerHTML = puntosComputadora
+        return puntosJugadores[turno]
+    }
 
-                //Insertar carta en el div contenedor
-                cartasPCContainer.append(cartaMostrar)
 
-            } else if(dueñoTurno==="jugador"){
+    const dibujarCarta = (carta, turno) => {
+        
+        //Crear elemento HTML de la carta
+            const cartaMostrar = document.createElement("img")
+        //Agregar atributo src (CLAVE)
+            cartaMostrar.setAttribute("src",`assets/cartas/${carta}.png` )
+        //Agregar clase al elemento
+            cartaMostrar.classList.add("carta")
 
-                console.log("turno jugador")
-                puntosJugador = puntosJugador + puntosDelTurno
-
-                let [primerSmall] = elementosSmall
-                primerSmall.innerHTML = puntosJugador
-
-                //Insertar carta en el div contenedor
-                cartasJugadorContainer.append(cartaMostrar)   
-            }         
+        contenedoresCartas[turno].append(cartaMostrar)
     }
 
     //========== Esta función ejecuta el turno de la computadora
@@ -177,22 +155,18 @@
     const turnoPC = (puntoMinimos)=>{
         
         do {
-            jugarTurno("pc")
-
+            const carta = pedirCarta()
+            acumularPuntos(carta, puntosJugadores.length-1)
+            dibujarCarta(carta, puntosJugadores.length-1)
             if(puntoMinimos>21){
                 break;
-            }
-                
-            
-        } while (puntosComputadora<puntoMinimos && puntoMinimos<=21 );
+            }        
+        } while (puntosJugadores.length-1<puntoMinimos && puntoMinimos<=21 );
 
         //Evaluación de resultado
-
-        setTimeout(() => {
-            evaluarResultado()
-
-        }, 300);
-
+            setTimeout(() => {
+                evaluarResultado()
+            }, 300);
     }
 
 
@@ -200,26 +174,21 @@
 
 
     btnPedir.addEventListener("click", ()=>{
-
-        jugarTurno("jugador")
-
+        const carta = pedirCarta()
+        const puntosJugador = acumularPuntos(carta, 0)
+        dibujarCarta(carta,0)
         //---------------------------Evaluar puntos del jugador
-
-        if (puntosJugador>21) {
-
-            console.warn("Lo siento mucho, perdiste")
-            btnPedir.setAttribute("disabled", "true")
-            btnDetener.disabled = true
-            turnoPC(puntosJugador)
-            
-        } else if ( puntosJugador==21){
-            console.warn("21, ganaste!")
-            btnPedir.setAttribute("disabled", "true")
-            btnDetener.disabled = true
-            turnoPC(puntosJugador)
-
-        }
-
+            if (puntosJugadores[0]>21) {
+                console.warn("Lo siento mucho, perdiste")
+                btnPedir.setAttribute("disabled", "true")
+                btnDetener.disabled = true
+                turnoPC(puntosJugador)           
+            } else if ( puntosJugadores[0]==21){
+                console.warn("21, ganaste!")
+                btnPedir.setAttribute("disabled", "true")
+                btnDetener.disabled = true
+                turnoPC(puntosJugador)
+            }
     })
 
     btnDetener.addEventListener("click", ()=>{
@@ -239,25 +208,24 @@
 
         //Limpiar la consola
         console.clear()
-
         // Acción N° 01 - Reiniciar deck de cartas
-        
         inicializarJuego()
 
         // Acción N° 02 - Borrar cartas de la pantalla
-            cartasJugadorContainer.innerHTML="";
-            cartasPCContainer.replaceChildren()
+
+            for (let i = 0; i < contenedoresCartas; i++) {
+                contenedoresCartas[i].replaceChildren();         
+            }
+           
 
         // Acción N° 03 - Resetear los puntajes
 
-            //Resetearlos visualmente en el HTML
-            let [primerSmall, segundoSmall] = elementosSmall
-            primerSmall.innerText = 0;
-            segundoSmall.innerText = 0;
-
-            //Resetear las variables globales que almacenan los puntos
-            puntosJugador = 0
-            puntosComputadora = 0
+            for (let i = 0; i < puntosJugadores.length; i++) {
+                //Resetearlos visualmente en el HTML
+                    elementosSmall[i].innerHTML = 0
+                //Resetear las variables globales que almacenan los puntos
+                    puntosJugadores[i] = 0    
+            }
 
         // Acción N° 04 - Habilitar botones "Pedir carta" y "Detener"
             btnPedir.disabled = false;
