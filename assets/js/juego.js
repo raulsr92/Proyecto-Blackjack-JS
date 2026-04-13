@@ -1,6 +1,6 @@
 
 
-(() =>{ 
+const miModulo = (() =>{ 
 
     'use strict'
     /* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Variables, arreglos ¬¬¬¬¬¬¬¬¬¬¬¬*/
@@ -33,15 +33,23 @@
         deck = crearDeck()
 
         //Inicializar el array de puntos
-
         puntosJugadores=[]
 
         for (let i = 0; i < numeroJugadores+1 ; i++) {
-            
-            puntosJugadores.push(0)
-            
+            puntosJugadores.push(0) 
         }
         console.log({puntosJugadores})
+
+
+        // Borrar cartas de la pantalla
+            contenedoresCartas.forEach((contenedor)=>contenedor.replaceChildren())
+
+        // Resetear los puntajes
+            elementosSmall.forEach((elemento)=>elemento.innerHTML=0)
+
+        // Acción N° 04 - Habilitar botones "Pedir carta" y "Detener"
+            btnPedir.disabled = false;
+            btnDetener.disabled = false
     }
 
     //========== Esta función crea la baraja
@@ -101,26 +109,29 @@
     //========== Esta función permite evaluar el resultado y lanzar las alertas de finalización del juego
 
     const evaluarResultado = ()=>{
-        if ( (puntosJugadores.length-1 > puntosJugadores[0] && puntosJugadores.length-1<=21) || puntosJugadores[0] >21) {
+        const [puntosJugador1, puntosPC] = puntosJugadores
+        console.log({puntosJugador1, puntosPC})
+        setTimeout(() => {
+
+            if ( (puntosPC > puntosJugador1 && puntosPC<=21) || puntosJugador1 >21) {
+                mostrarAlerta("Lo siento, perdiste","La computadora gana","error")
+                
+            } else if ( (puntosJugador1 > puntosPC && puntosJugador1<=21) || puntosPC>21 ) {
+                mostrarAlerta("Felicidades, ganaste!","Usted ha ganado la partida","success")
+
+            }  else if (puntosJugador1 == puntosPC){
+                mostrarAlerta("Es un empate!","Nadie gana","info")
+            }
+
+        }, 300);
+    }
+
+    const mostrarAlerta = (titulo, mensaje, icono) =>{
             Swal.fire({
-                title: "Lo siento, perdiste",
-                text: "La computadora gana",
-                icon: "error"
-            });
-            
-        } else if ( (puntosJugadores[0] > puntosJugadores.length-1 && puntosJugadores[0]<=21) || puntosJugadores.length-1>21 ) {
-            Swal.fire({
-                title: "Felicidades, ganaste!",
-                text: "Usted ha ganado la partida",
-                icon: "success"
-            });    
-        }  else if (puntosJugadores[0] == puntosJugadores.length-1){
-            Swal.fire({
-                title: "Es un empate!",
-                text: "Nadie gana",
-                icon: "info"
+                    title: titulo,
+                    text: mensaje,
+                    icon: icono
             }); 
-        }
     }
 
     //========== Esta función realiza el procedimiento de pedir una carta y mostrarla en la pantalla del juego
@@ -129,6 +140,7 @@
 
     const acumularPuntos = (carta,turno)=>{
 
+
         puntosJugadores[turno] = puntosJugadores[turno] + valorCarta(carta) 
 
         elementosSmall[turno].innerHTML = puntosJugadores[turno]
@@ -136,7 +148,6 @@
 
         return puntosJugadores[turno]
     }
-
 
     const dibujarCarta = (carta, turno) => {
         
@@ -153,37 +164,40 @@
     //========== Esta función ejecuta el turno de la computadora
 
     const turnoPC = (puntoMinimos)=>{
-        
+
         do {
             const carta = pedirCarta()
             acumularPuntos(carta, puntosJugadores.length-1)
             dibujarCarta(carta, puntosJugadores.length-1)
             if(puntoMinimos>21){
                 break;
-            }        
-        } while (puntosJugadores.length-1<puntoMinimos && puntoMinimos<=21 );
+            }    
+    
+        } while (puntosJugadores[puntosJugadores.length-1]<puntoMinimos && puntoMinimos<=21 );
 
         //Evaluación de resultado
-            setTimeout(() => {
-                evaluarResultado()
-            }, 300);
+
+            evaluarResultado()
     }
 
-
     /* ¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬ Eventos ¬¬¬¬¬¬¬¬¬¬¬¬*/
-
 
     btnPedir.addEventListener("click", ()=>{
         const carta = pedirCarta()
         const puntosJugador = acumularPuntos(carta, 0)
         dibujarCarta(carta,0)
+
+        //Acceder a los puntos de los jugadores y pc con desestructuración de arrays
+        const [puntosJugador1, puntosPC] = puntosJugadores
+
         //---------------------------Evaluar puntos del jugador
-            if (puntosJugadores[0]>21) {
+
+            if (puntosJugador1>21) {
                 console.warn("Lo siento mucho, perdiste")
                 btnPedir.setAttribute("disabled", "true")
                 btnDetener.disabled = true
                 turnoPC(puntosJugador)           
-            } else if ( puntosJugadores[0]==21){
+            } else if ( puntosJugador1==21){
                 console.warn("21, ganaste!")
                 btnPedir.setAttribute("disabled", "true")
                 btnDetener.disabled = true
@@ -195,43 +209,25 @@
 
         console.log("Click en btn Detener")
 
-        //Bloquear botones PEDIR CARTA y DETENER
+        //Acceder a los puntos de los jugadores y pc con desestructuración de arrays
+        const [puntosJugador1, puntosPC] = puntosJugadores
 
+        //Bloquear botones PEDIR CARTA y DETENER
         btnPedir.setAttribute("disabled", true )
         btnDetener.disabled = true
-
-        turnoPC(puntosJugador)
-
+        
+        turnoPC(puntosJugador1)
     })
 
     btnNuevoJuego.addEventListener("click", () =>{
 
-        //Limpiar la consola
-        console.clear()
-        // Acción N° 01 - Reiniciar deck de cartas
         inicializarJuego()
 
-        // Acción N° 02 - Borrar cartas de la pantalla
-
-            for (let i = 0; i < contenedoresCartas; i++) {
-                contenedoresCartas[i].replaceChildren();         
-            }
-           
-
-        // Acción N° 03 - Resetear los puntajes
-
-            for (let i = 0; i < puntosJugadores.length; i++) {
-                //Resetearlos visualmente en el HTML
-                    elementosSmall[i].innerHTML = 0
-                //Resetear las variables globales que almacenan los puntos
-                    puntosJugadores[i] = 0    
-            }
-
-        // Acción N° 04 - Habilitar botones "Pedir carta" y "Detener"
-            btnPedir.disabled = false;
-            btnDetener.disabled = false
-
     })
+
+    return{
+        nuevoJuego: inicializarJuego
+    }
 
 }) ();
 
